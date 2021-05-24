@@ -1,0 +1,12 @@
+{
+  "name": "Kiblitzer Lichess View",
+  "description": "Custom UI behavior for casting chess games in Lichess",
+  "version": "1.0",
+  "manifest_version": 3,
+  "content_scripts": [
+    {
+      "matches": ["https://lichess.org/*"],
+      "js": ["ui.js"]
+    }
+  ]
+}
