@@ -1,4 +1,3 @@
-// TODO - finish setting up chrome extension
 // TODO - add interface in chrome extension to start the game
 
 function trackPlayArea() {
@@ -22,9 +21,7 @@ function trackPlayArea() {
   obs.observe(main, { childList: true, subtree: true });
 
   // Setup for the game meta data
-  // TODO: remove the game result from meta and from bottom of the replay board
   // TODO: remove my profile name
-  // TODO: unhide things when the game is over
 
   // TODO: stretch goal, try moving the move times to better location?
 }
@@ -45,6 +42,12 @@ function clearMetaOfSpoilers() {
       element.style = 'visibility: hidden;';
     })
   });
+
+  let replayBoard = document.getElementsByClassName('areplay')[0];
+  let resultEntry = replayBoard.getElementsByClassName('result')[0];
+  let statusEntry = replayBoard.getElementsByClassName('status')[0];
+  resultEntry.style = "display: none;"
+  statusEntry.style = "display: none;"
 }
 
 function trackMoveChanges() {
@@ -63,6 +66,8 @@ function trackMoveChanges() {
 }
 
 function revealPlayedMoves() {
+  const MOVE_PADDING = 30;
+
   let moves = document.getElementsByTagName('move');
   let activeVisible = false, activeSeen = false;
 
@@ -73,6 +78,23 @@ function revealPlayedMoves() {
       return;
     }
   });
+
+  // Pad out moves
+  let movesBoard = document.getElementsByClassName('tview2')[0];
+  if(movesBoard.dataset['padded'] === undefined) {
+    movesBoard.dataset['padded'] = true;
+    let i, count = Math.round(moves.length / 2) + 1, indexNode;
+    // If we have an odd number, pad out the last one so everything lines up
+    if (moves.length % 2 == 1) { movesBoard.appendChild(document.createElement('move')); }
+    for (i = 0; i < MOVE_PADDING; i++) {
+      indexNode = document.createElement('index');
+      indexNode.innerHTML = `${count}`;
+      movesBoard.appendChild(indexNode);
+      movesBoard.appendChild(document.createElement('move'));
+      movesBoard.appendChild(document.createElement('move'));
+      count++;
+    }
+  }
 
   Array.prototype.forEach.call(moves, (element) => {
     if (activeSeen || !activeVisible) {
@@ -86,16 +108,14 @@ function revealPlayedMoves() {
     activeSeen = element.classList.contains('active');
   });
 
-  let lastMoveMade = moves[moves.length - 1].classList.contains('active');
-  let replayBoard = document.getElementsByClassName('areplay')[0];
-  let resultEntry = replayBoard.getElementsByClassName('result')[0];
-  let statusEntry = replayBoard.getElementsByClassName('status')[0];
+
+  let lastMoveMade = moves[moves.length - 1 - (2 * MOVE_PADDING)].classList.contains('active');
+
   if (lastMoveMade) {
-    resultEntry.style = "visibility: visible;"
-    statusEntry.style = "visibility: visible;"
-  } else {
-    resultEntry.style = "visibility: hidden;"
-    statusEntry.style = "visibility: hidden;"
+    let metaCard = document.getElementsByClassName('game__meta')[0];
+    let replayBoard = document.getElementsByClassName('areplay')[0];
+
+    metaCard.getElementsByClassName('status')[0].innerText = replayBoard.getElementsByClassName('status')[0].innerHTML;
   }
 }
 
