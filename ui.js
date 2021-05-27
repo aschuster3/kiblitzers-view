@@ -29,7 +29,7 @@ function trackPlayArea() {
 function clearMetaOfSpoilers() {
   let metaCard = document.getElementsByClassName('game__meta')[0];
 
-  metaCard.getElementsByClassName('status')[0].innerText = 'Results? In this economy?';
+  metaCard.getElementsByClassName('status')[0].innerText = 'Fuhgeddaboudit';
   metaCard.getElementsByTagName('time')[0].style = 'visibility: hidden;';
 
   playersCard = metaCard.getElementsByClassName('game__meta__players')[0];
@@ -83,6 +83,7 @@ function revealPlayedMoves() {
   let movesBoard = document.getElementsByClassName('tview2')[0];
   if(movesBoard.dataset['padded'] === undefined) {
     movesBoard.dataset['padded'] = true;
+    movesBoard.dataset['lastMove'] = moves.length - 1;
     let i, count = Math.round(moves.length / 2) + 1, indexNode;
     // If we have an odd number, pad out the last one so everything lines up
     if (moves.length % 2 == 1) { movesBoard.appendChild(document.createElement('move')); }
@@ -108,8 +109,7 @@ function revealPlayedMoves() {
     activeSeen = element.classList.contains('active');
   });
 
-
-  let lastMoveMade = moves[moves.length - 1 - (2 * MOVE_PADDING)].classList.contains('active');
+  let lastMoveMade = moves[parseInt(movesBoard.dataset['lastMove'])].classList.contains('active');
 
   if (lastMoveMade) {
     let metaCard = document.getElementsByClassName('game__meta')[0];
