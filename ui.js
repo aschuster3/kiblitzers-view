@@ -32,10 +32,13 @@ function clearMetaOfSpoilers() {
   metaCard.getElementsByClassName('status')[0].innerText = 'Fuhgeddaboudit';
   metaCard.getElementsByTagName('time')[0].style = 'visibility: hidden;';
 
-  playersCard = metaCard.getElementsByClassName('game__meta__players')[0];
-  no_change = playersCard.getElementsByTagName('span');
-  increase_ranking = playersCard.getElementsByTagName('good');
-  decrease_ranking = playersCard.getElementsByTagName('bad');
+  let belowCard = document.getElementsByClassName('analyse__underboard')[0];
+  belowCard.style = 'display: none;';
+
+  let playersCard = metaCard.getElementsByClassName('game__meta__players')[0];
+  let no_change = playersCard.getElementsByTagName('span');
+  let increase_ranking = playersCard.getElementsByTagName('good');
+  let decrease_ranking = playersCard.getElementsByTagName('bad');
 
   [no_change, increase_ranking, decrease_ranking].forEach(score_results => {
     Array.prototype.forEach.call(score_results, (element) => {
